@@ -1,58 +1,34 @@
-﻿# CICD_fastAPI1226
-# Ephemeral Microservice Stack
+﻿# FastAPI CI/CD Demo
 
-This project demonstrates how to deploy a simple Python FastAPI API and a PostgreSQL database to a temporary Kubernetes cluster created with kind inside a GitHub Actions workflow.  
-The system is considered successful when a Kubernetes Job can send a POST request to the API, which then writes data into the PostgreSQL database.
+This repository contains a minimal FastAPI application with unit tests, a Dockerfile, and a GitHub Actions workflow to demonstrate a basic CI/CD pipeline.[web:10][web:11]
 
-## Tech Stack
+## Features
 
-- Python + FastAPI
-- PostgreSQL (postgres:15-alpine)
-- Docker
-- Kubernetes (kind)
-- Helm
-- GitHub Actions
-
----
+- Simple FastAPI HTTP endpoint (`GET /`) returning a JSON message.  
+- Unit tests using `pytest` and `fastapi.testclient`.  
+- Docker image build using a multi-stage Dockerfile.  
+- GitHub Actions workflow that installs dependencies, runs tests, and builds the Docker image.[web:10][web:11]
 
 ## Project Structure
 
-- `app.py` – FastAPI application with a `/health` endpoint and a `/write` endpoint that writes a message to PostgreSQL.
-- `requirements.txt` – Python dependencies for the application.
-- `Dockerfile` – Builds a container image for the FastAPI application.
-- `charts/my-app/` – Helm chart that defines:
-  - FastAPI Deployment and Service.
-  - PostgreSQL Deployment and Service (using `emptyDir` for storage).
-- `k8s/test-job.yaml` – Kubernetes Job that uses a curl image to send a JSON POST request to the API.
-- `.github/workflows/main.yml` – GitHub Actions workflow that:
-  - Builds the Docker image.
-  - Creates a kind cluster.
-  - Loads the image into kind.
-  - Installs the Helm chart.
-  - Runs the test Job and waits for it to complete.
+- `main.py` – FastAPI application entry point.  
+- `test_main.py` – Unit test for the root endpoint.  
+- `requirements.txt` – Python dependencies.  
+- `Dockerfile` – Multi-stage Dockerfile for building and running the app.  
+- `.github/workflows/ci-cd.yml` – CI/CD pipeline definition for GitHub Actions.  
+- `docs/index.md` (optional) – Content for GitHub Pages.[web:10][web:11][web:44]
 
----
+## Requirements
 
-## Application Behavior
+- Python 3.11 (or compatible 3.x version).  
+- pip.  
+- Docker (for container build and run).  
+- A GitHub repository with Actions enabled (for CI/CD).[web:11][web:50]
 
-The FastAPI app:
+## Local Development
 
-- Reads database connection settings from environment variables:
-  - `POSTGRES_DB`
-  - `POSTGRES_USER`
-  - `POSTGRES_PASSWORD`
-  - `POSTGRES_HOST`
-- On startup, creates a `logs` table if it does not exist.
-- Exposes:
-  - `GET /health` – Simple health check.
-  - `POST /write` – Accepts JSON `{"message": "text"}` and inserts it into the `logs` table.
+### 1. Create and activate a virtual environment (optional but recommended)
 
----
-
-## Phase 1: Containerization
-
-1. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-
+```bash
+python -m venv .venv
+# Win
